@@ -44,7 +44,10 @@ module I18n
       end
 
       #subject is hash or string
-      def deep_compile(locale, subject, options)
+      def deep_compile(locale, subject_obj, options)
+        # NOTE: ruby 3.0 へのアップデートに伴い、FrozenError が発生する事象が発生
+        # 対象オブジェクトに dup を追加し、freeze を解除
+        subject = subject_obj.dup
         if subject.is_a?(Hash)
           subject.each do |key, object|
             subject[key], _had_to_compile_result = deep_compile(locale, object, options)
